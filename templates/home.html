@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Ride Sharing</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body class="modern-home">
+
+<div class="home-wrapper">
+
+    <div class="home-content">
+
+        <h1>🚗 Ride Sharing System</h1>
+        <p class="subtitle">Find your perfect ride easily and quickly</p>
+
+        <div class="search-card">
+            <form method="POST">
+                <input type="text" name="start" placeholder="Starting Point" required>
+                <input type="text" name="end" placeholder="Destination" required>
+                <button type="submit" class="search-btn">Search Ride</button>
+            </form>
+
+            <!-- Buttons BELOW search -->
+            <div class="home-buttons">
+                <a href="/login_page" class="login-btn">Login</a>
+                <a href="/signup_page" class="signup-btn">Create Account</a>
+            </div>
+        </div>
+
+        {% if rides %}
+        <div class="results">
+            <h2>Available Rides</h2>
+            <table>
+                <tr>
+                    <th>Route</th>
+                    <th>Date</th>
+                    <th>Time</th>
+                    <th>Seats</th>
+                </tr>
+                {% for ride in rides %}
+                <tr>
+                    <td>{{ ride.start_point }} → {{ ride.end_point }}</td>
+                    <td>{{ ride.ride_date }}</td>
+                    <td>{{ ride.ride_time }}</td>
+                    <td>{{ ride.seats }}</td>
+                </tr>
+                {% endfor %}
+            </table>
+        </div>
+        {% elif rides is not none %}
+            <p class="no-rides">No rides found.</p>
+        {% endif %}
+
+    </div>
+
+</div>
+
+</body>
+</html>

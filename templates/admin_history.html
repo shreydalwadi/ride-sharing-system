@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Admin History</title>
+<link rel="stylesheet" href="/style.css">
+</head>
+<body>
+
+<div class="app">
+<div class="sidebar">
+<h2>RideShare</h2>
+<a href="/admin/dashboard">Dashboard</a>
+<a href="/logout">Logout</a>
+</div>
+
+<div class="main">
+<div class="topbar">System Ride History</div>
+
+<div class="card">
+{% if history %}
+<table>
+<tr>
+<th>Driver</th><th>Passenger</th><th>From</th><th>To</th><th>Date</th>
+</tr>
+{% for ride in history %}
+<tr>
+<td>{{ ride.driver_name }}</td>
+<td>{{ ride.passenger_name }}</td>
+<td>{{ ride.start_point }}</td>
+<td>{{ ride.end_point }}</td>
+<td>{{ ride.ride_date }}</td>
+</tr>
+{% endfor %}
+</table>
+{% else %}
+No completed rides.
+{% endif %}
+</div>
+
+</div>
+</div>
+</body>
+</html>

@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Edit Ride</title>
+<link rel="stylesheet" href="/style.css">
+</head>
+<body>
+
+<div class="auth-page">
+<div class="auth-card">
+
+<h2>Edit Ride</h2>
+
+<form method="POST">
+<input type="text" name="start" value="{{ ride.start_point }}" required>
+<input type="text" name="end" value="{{ ride.end_point }}" required>
+<input type="number" name="seats" value="{{ ride.seats }}" required>
+<input type="date" name="ride_date" value="{{ ride.ride_date }}" required>
+<input type="time" name="ride_time" value="{{ ride.ride_time }}" required>
+<button type="submit">Update Ride</button>
+</form>
+
+</div>
+</div>
+
+</body>
+</html>

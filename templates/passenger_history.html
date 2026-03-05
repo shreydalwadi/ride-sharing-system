@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Passenger History</title>
+    <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+
+<div class="app">
+
+    <div class="sidebar">
+        <h2>🚗 RideShare</h2>
+        <a href="/passenger/dashboard">Dashboard</a>
+        <a href="/passenger/history">History</a>
+        <a href="/logout">Logout</a>
+    </div>
+
+    <div class="main">
+
+        <div class="topbar">
+            <h3>My Completed Rides</h3>
+        </div>
+
+        <div class="card">
+
+            {% if history %}
+            <table>
+                <tr>
+                    <th>Route</th>
+                    <th>Date</th>
+                    <th>Time</th>
+                    <th>Driver</th>
+                </tr>
+
+                {% for ride in history %}
+                <tr>
+                    <td>{{ ride.start_point }} → {{ ride.end_point }}</td>
+                    <td>{{ ride.ride_date }}</td>
+                    <td>{{ ride.ride_time }}</td>
+                    <td>{{ ride.driver_name }}</td>
+                </tr>
+                {% endfor %}
+            </table>
+
+            {% else %}
+                <p>No completed rides yet.</p>
+            {% endif %}
+
+        </div>
+
+    </div>
+</div>
+
+</body>
+</html>

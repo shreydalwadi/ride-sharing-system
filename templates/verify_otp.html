@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>OTP Verification - RideShare</title>
+    <link rel="stylesheet" href="/style.css">
+</head>
+<body class="auth-page">
+
+<div class="auth-card">
+    <h2>🔐 OTP Verification</h2>
+
+    <!-- Flash Message -->
+    {% with messages = get_flashed_messages() %}
+        {% if messages %}
+            <p style="color:#00ffcc; text-align:center; margin-bottom:10px;">
+                {{ messages[0] }}
+            </p>
+        {% endif %}
+    {% endwith %}
+
+    <p id="instruction" style="text-align:center; font-size:14px; margin-bottom:15px;">
+        OTP is valid for 5 minutes.
+    </p>
+
+    <!-- OTP Timer -->
+    <p style="text-align:center; margin-bottom:15px;">
+        ⏳ Time Remaining: <span id="timer">05:00</span>
+    </p>
+
+    <form method="POST">
+        <input type="text" name="otp" placeholder="Enter 6-digit OTP" maxlength="6" required>
+        <button type="submit">Verify OTP</button>
+    </form>
+
+    <!-- Resend -->
+    <div style="text-align:center; margin-top:15px;">
+        <button id="resendBtn" onclick="resendOTP()" disabled>
+            Resend OTP
+        </button>
+        <p style="font-size:13px; margin-top:5px;">
+            You can resend OTP in <span id="resendTimer">30</span> seconds
+        </p>
+    </div>
+
+    <div class="auth-links">
+        <p><a href="/login_page">Back to Login</a></p>
+    </div>
+</div>
+
+<script>
+
+/* ===== OTP 5 Minute Timer ===== */
+let otpTime = 300;
+const timerDisplay = document.getElementById("timer");
+
+function startOtpTimer() {
+    otpTime = 300;
+
+    const otpInterval = setInterval(() => {
+        let minutes = Math.floor(otpTime / 60);
+        let seconds = otpTime % 60;
+
+        seconds = seconds < 10 ? "0" + seconds : seconds;
+        timerDisplay.textContent = minutes + ":" + seconds;
+
+        if (otpTime <= 0) {
+            timerDisplay.textContent = "Expired";
+            clearInterval(otpInterval);
+        }
+
+        otpTime--;
+    }, 1000);
+}
+
+startOtpTimer();
+
+
+/* ===== 30 Second Resend Cooldown ===== */
+let resendTime = 30;
+const resendBtn = document.getElementById("resendBtn");
+const resendTimer = document.getElementById("resendTimer");
+
+function startResendTimer() {
+    resendBtn.disabled = true;
+    resendTime = 30;
+
+    const resendInterval = setInterval(() => {
+        resendTimer.textContent = resendTime;
+
+        if (resendTime <= 0) {
+            resendBtn.disabled = false;
+            clearInterval(resendInterval);
+        }
+
+        resendTime--;
+    }, 1000);
+}
+
+startResendTimer();
+
+
+/* ===== Resend OTP ===== */
+function resendOTP() {
+    document.getElementById("instruction").innerText =
+        "New OTP has been sent to your email. Valid for 5 minutes.";
+
+    startOtpTimer();
+    startResendTimer();
+
+    window.location.href = "/resend_otp";
+}
+
+</script>
+
+</body>
+</html>

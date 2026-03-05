@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Signup - RideShare</title>
+    <link rel="stylesheet" href="/style.css">
+</head>
+<body class="auth-page">
+
+<div class="auth-card">
+    <h2>🚗 Create Account</h2>
+
+    <form action="/signup" method="POST">
+
+        <input type="text" name="name" placeholder="Full Name" required>
+
+        <input type="text" name="mobile" placeholder="Mobile Number" required>
+
+        <input type="email" name="email" placeholder="Email Address" required>
+
+        <input type="password" name="password" placeholder="Password" required>
+
+        <!-- Role Selection -->
+        <select name="role" id="roleSelect" required onchange="toggleVehicleField()">
+            <option value="">Select Role</option>
+            <option value="driver">Driver</option>
+            <option value="passenger">Passenger</option>
+        </select>
+
+        <!-- Vehicle Field (Hidden by Default) -->
+        <div id="vehicleField" style="display: none;">
+            <input type="text" id="vehicleInput" name="vehicle_number" placeholder="Vehicle Number (e.g. GJ01AB1234)">
+        </div>
+
+        <button type="submit">Signup</button>
+    </form>
+
+    <div class="auth-links">
+        <p><a href="/login_page">Already have an account? Login</a></p>
+        <p><a href="/">Back to Home</a></p>
+    </div>
+</div>
+
+<!-- JavaScript -->
+<script>
+function toggleVehicleField() {
+    const role = document.getElementById("roleSelect").value;
+    const vehicleField = document.getElementById("vehicleField");
+    const vehicleInput = document.getElementById("vehicleInput");
+
+    if (role === "driver") {
+        vehicleField.style.display = "block";
+        vehicleInput.required = true;
+    } else {
+        vehicleField.style.display = "none";
+        vehicleInput.required = false;
+        vehicleInput.value = "";
+    }
+}
+
+/* Auto uppercase vehicle number */
+document.getElementById("vehicleInput").addEventListener("input", function() {
+    this.value = this.value.toUpperCase();
+});
+</script>
+
+</body>
+</html>

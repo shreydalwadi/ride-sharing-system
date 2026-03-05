@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Passenger Dashboard</title>
+    <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+
+<div class="app">
+
+    <!-- SIDEBAR -->
+    <div class="sidebar">
+        <h2>🚗 RideShare</h2>
+        <a href="/passenger/dashboard">Dashboard</a>
+        <a href="/passenger/history">History</a>
+        <a href="/logout">Logout</a>
+    </div>
+
+    <!-- MAIN -->
+    <div class="main">
+
+        <!-- TOPBAR -->
+        <div class="topbar">
+            <h3>Welcome Passenger, {{ session.name }}</h3>
+        </div>
+
+        <!-- SEARCH RIDE -->
+        <div class="card">
+            <h3>🔍 Search Ride</h3>
+            <form method="POST">
+                <input type="text" name="start" placeholder="From" required>
+                <input type="text" name="end" placeholder="To" required>
+                <button type="submit">Search</button>
+            </form>
+        </div>
+
+        <!-- AVAILABLE RIDES -->
+        {% if rides %}
+        <div class="card">
+            <h3>🚘 Available Rides</h3>
+            <table>
+                <tr>
+                    <th>Route</th>
+                    <th>Date</th>
+                    <th>Time</th>
+                    <th>Driver</th>
+                    <th>Seats</th>
+                    <th>Action</th>
+                </tr>
+
+                {% for ride in rides %}
+                <tr>
+                    <td>{{ ride.start_point }} → {{ ride.end_point }}</td>
+                    <td>{{ ride.ride_date }}</td>
+                    <td>{{ ride.ride_time }}</td>
+                    <td>{{ ride.driver_name }}</td>
+                    <td>{{ ride.seats }}</td>
+                    <td>
+                        <a href="/request_ride/{{ ride.id }}" class="edit-btn">Request</a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </table>
+        </div>
+        {% endif %}
+
+        <!-- MY RIDE REQUESTS -->
+        <div class="card">
+            <h3>📋 My Ride Requests</h3>
+
+            {% if requests %}
+            <table>
+                <tr>
+                    <th>Route</th>
+                    <th>Date</th>
+                    <th>Driver</th>
+                    <th>Mobile</th>
+                    <th>Vehicle</th>
+                    <th>Status</th>
+                    <th>Action</th>
+                </tr>
+
+                {% for req in requests %}
+                <tr>
+                    <td>{{ req.start_point }} → {{ req.end_point }}</td>
+                    <td>{{ req.ride_date }} {{ req.ride_time }}</td>
+                    <td>{{ req.driver_name }}</td>
+                    <td>{{ req.driver_mobile }}</td>
+                    <td>{{ req.vehicle_number }}</td>
+
+                    <!-- STATUS -->
+                    <td>
+                        {% if req.ride_status == 'Scheduled' %}
+                            <span class="badge scheduled">Pending</span>
+
+                        {% elif req.ride_status == 'Ongoing' %}
+                            <span class="badge ongoing">Ongoing</span>
+
+                        {% elif req.ride_status == 'Completed' and not req.rating %}
+                            <span class="badge completed">Completed</span>
+
+                        {% elif req.rating %}
+                            <span class="badge completed">Rated</span>
+                        {% endif %}
+                    </td>
+
+                    <!-- ACTION -->
+                    <td>
+                        {% if req.ride_status == 'Completed' and not req.rating %}
+                        <form action="/rate_driver/{{ req.id }}" method="POST">
+                            <select name="rating" required>
+                                <option value="">Rate</option>
+                                <option value="1">1 ⭐</option>
+                                <option value="2">2 ⭐</option>
+                                <option value="3">3 ⭐</option>
+                                <option value="4">4 ⭐</option>
+                                <option value="5">5 ⭐</option>
+                            </select>
+                            <button type="submit">Submit</button>
+                        </form>
+                        {% else %}
+                            ---
+                        {% endif %}
+                    </td>
+
+                </tr>
+                {% endfor %}
+            </table>
+
+            {% else %}
+                <p>No ride requests yet.</p>
+            {% endif %}
+        </div>
+
+    </div>
+</div>
+
+</body>
+</html>
